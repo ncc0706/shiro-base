@@ -7,6 +7,8 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.authz.permission.WildcardPermission;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
@@ -18,8 +20,19 @@ public class StaticRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(
 			PrincipalCollection principals) {
-		// TODO Auto-generated method stub
-		return null;
+		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+		
+		
+		info.addRole("r1");
+		info.addRole("r2");
+		
+		info.addStringPermission("+user+*");
+		info.addObjectPermission(new CustomPermission("+topic+create"));
+		info.addObjectPermission(new CustomPermission("+topic+del+1"));
+		
+		info.addObjectPermission(new WildcardPermission("test:*"));
+		
+		return info;
 	}
 
 	/**
